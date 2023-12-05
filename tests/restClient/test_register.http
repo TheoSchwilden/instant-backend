@@ -1,0 +1,19 @@
+### Register User Test ###
+
+### Register User Request ###
+POST http://localhost:3333/api/register
+Content-Type: application/json
+
+{
+  "email": "testuser2@user.com",
+  "password": "testpassword",
+  "password_confirmation": "testpassword"
+}
+
+### Register User Response ###
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "message": "User registered successfully"
+}
