@@ -30,7 +30,7 @@ export default class CreateEventValidator {
     date: schema.date(),
     time: schema.date(),
     location: schema.string({ trim: true }, [rules.minLength(3)]),
-    userId: schema.number(),
+    // userId: schema.number(),
   })
 
   /**

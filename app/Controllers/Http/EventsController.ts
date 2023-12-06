@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Event from 'App/Models/Event'
 import CreateEventValidator from 'App/Validators/CreateEventValidator'
+import { logger } from 'Config/app'
 
 export default class EventsController {
   public async index({ response }: HttpContextContract) {
@@ -23,13 +24,17 @@ export default class EventsController {
 
   public async store({ request, response, auth }: HttpContextContract) {
     try {
-      console.log('Request body:', request.body()) // Log the request body
+      logger.info('Request body:', request.body()) // Log the request body
       const payload = await request.validate(CreateEventValidator)
-      console.log('Payload after validation:', payload) // Log the payload after validation
-      const event = await Event.create({ ...payload, userId: auth.user?.id })
+      logger.info('Payload after validation:', payload) // Log the payload after validation
+      const user = auth.use('api').user
+      if (!user) {
+        return response.status(401).json({ message: 'User not authenticated' })
+      }
+      const event = await Event.create({ ...payload, userId: user.id })
       return response.status(201).json(event)
     } catch (error) {
-      console.log('Error:', error) // Log the error
+      logger.info('Error:', error) // Log the error
       return response.status(error.status).json({ message: error.message })
     }
   }

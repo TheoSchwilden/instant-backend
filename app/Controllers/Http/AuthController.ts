@@ -6,8 +6,8 @@ export default class AuthController {
   public async login({ auth, request, response }: HttpContextContract) {
     try {
       const { email, password } = request.all()
-      await auth.attempt(email, password)
-      return response.status(200).json({ message: 'Logged in successfully' })
+      const token = await auth.use('api').attempt(email, password)
+      return response.status(200).json({ token: token.toJSON() })
     } catch (error) {
       return response.status(error.status).json({ message: error.message })
     }
@@ -21,6 +21,15 @@ export default class AuthController {
       return response.status(200).json({ message: 'User registered successfully' })
     } catch (error) {
       // Adonis peut gérer les erreurs ici, par exemple, si la validation échoue
+      return response.status(error.status).json({ message: error.message })
+    }
+  }
+
+  public async logout({ auth, response }: HttpContextContract) {
+    try {
+      await auth.use('api').revoke()
+      return response.status(200).json({ message: 'Logout successful' })
+    } catch (error) {
       return response.status(error.status).json({ message: error.message })
     }
   }
