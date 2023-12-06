@@ -28,3 +28,17 @@ Route.group(() => {
   Route.post('/login', 'AuthController.login')
   Route.post('/register', 'AuthController.register')
 }).prefix('api')
+
+Route.group(() => {
+  Route.get('/events', 'EventsController.index')
+  Route.get('/events/:id', 'EventsController.show')
+  Route.post('/events', 'EventsController.store')
+  Route.put('/events/:id', 'EventsController.update')
+  Route.delete('/events/:id', 'EventsController.destroy')
+  Route.get('/events/search', 'EventsController.search')
+  Route.get('/events/user/:id', 'EventsController.getEventsByUser')
+  Route.get('/events/past', 'EventsController.getPastEvents')
+  Route.get('/events/upcoming', 'EventsController.getUpcomingEvents')
+})
+  .middleware('auth')
+  .prefix('api')

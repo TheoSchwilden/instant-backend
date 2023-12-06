@@ -1,0 +1,13 @@
+POST http://localhost:3333/api/events
+Content-Type: application/json
+
+{
+  "title": "Event 1",
+  "description": "Event 1 description",
+  "image": "https://via.placeholder.com/150",
+  "date": "2021-01-01",
+  "time": "1970-01-01T10:00:00",
+  "location": "Event 1 location",
+  "userId": 1
+}
+```
