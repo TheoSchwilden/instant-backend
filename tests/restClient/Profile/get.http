@@ -1,0 +1,3 @@
+GET http://localhost:3333/api/profiles
+Content-Type: application/json
+Authorization: Bearer MQ.2ZsAeiM54oHxT0-CEDlNOE-tEPkv7onm7COH89wPhWEKccMilP_gR_taI9al

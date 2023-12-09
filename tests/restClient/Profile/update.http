@@ -1,0 +1,10 @@
+PUT http://localhost:3333/api/profiles/2
+Content-Type: application/json
+Authorization: Bearer MQ.2ZsAeiM54oHxT0-CEDlNOE-tEPkv7onm7COH89wPhWEKccMilP_gR_taI9al
+
+{
+  "userName": "bgdu46",
+  "avatar": "https://avatars.githubusercontent.com/u/1024025?v=4",
+  "bio": "I'm a software engineer who loves to code and build things.",
+  "userId": 1
+}

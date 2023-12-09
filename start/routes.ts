@@ -41,3 +41,11 @@ Route.group(() => {
 })
   .middleware('auth')
   .prefix('api')
+
+Route.group(() => {
+  Route.get('/profiles', 'ProfilesController.getProfile')
+  Route.post('/profiles', 'ProfilesController.store')
+  Route.put('/profiles/:id', 'ProfilesController.update')
+})
+  .middleware('auth')
+  .prefix('api')

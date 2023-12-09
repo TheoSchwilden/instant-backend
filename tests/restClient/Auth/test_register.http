@@ -5,7 +5,7 @@ POST http://localhost:3333/api/register
 Content-Type: application/json
 
 {
-  "email": "testuser2@user.com",
+  "email": "testuser@user.com",
   "password": "testpassword",
   "password_confirmation": "testpassword"
 }
