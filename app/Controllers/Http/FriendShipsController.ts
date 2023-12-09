@@ -11,6 +11,7 @@ export default class FriendShipsController {
       const friends = await user
         .related('friends')
         .query()
+        .where('accepted', true)
         .preload('friend', (query) => {
           query.preload('profile')
         })
@@ -27,22 +28,34 @@ export default class FriendShipsController {
       const friendShip = new FriendShip()
       friendShip.userId = user.id
       friendShip.friendId = friendId
+      console.log(friendShip)
+
       await friendShip.save()
       return response.status(201).json(friendShip)
     } catch (error) {
-      return response.status(error.status).json({ message: error.message })
+      return response.status(error.status || 500).json({ message: error.message })
     }
   }
 
   public async acceptFriend({ auth, params, response }: HttpContextContract) {
     try {
       const user = await auth.use('api').authenticate()
+      console.log(user.id) // Ajoutez cette ligne
+      console.log(params.id) // Ajoutez cette ligne
       const friendShip = await FriendShip.query()
-        .where('friend_id', user.id)
         .where('user_id', params.id)
+        .where('friend_id', user.id)
         .firstOrFail()
+      console.log(friendShip)
       friendShip.accepted = true
       await friendShip.save()
+
+      const reverseFriendShip = new FriendShip()
+      reverseFriendShip.userId = user.id
+      reverseFriendShip.friendId = params.id
+      reverseFriendShip.accepted = true
+      await reverseFriendShip.save()
+
       return response.status(200).json(friendShip)
     } catch (error) {
       return response.status(error.status).json({ message: error.message })
@@ -71,6 +84,13 @@ export default class FriendShipsController {
         .where('user_id', params.id)
         .firstOrFail()
       await friendShip.delete()
+
+      const reverseFriendShip = await FriendShip.query()
+        .where('user_id', user.id)
+        .where('friend_id', params.id)
+        .firstOrFail()
+      await reverseFriendShip.delete()
+
       return response.status(200).json({ message: 'Friendship deleted' })
     } catch (error) {
       return response.status(error.status).json({ message: error.message })
