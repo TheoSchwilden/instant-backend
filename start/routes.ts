@@ -49,3 +49,13 @@ Route.group(() => {
 })
   .middleware('auth')
   .prefix('api')
+
+Route.group(() => {
+  Route.get('/friends', 'FriendShipsController.index')
+  Route.post('/friends', 'FriendShipsController.addFriend')
+  Route.put('/friends/:id', 'FriendShipsController.acceptFriend')
+  Route.delete('/friends/:id', 'FriendShipsController.rejectFriend')
+  Route.delete('/friends/:id', 'FriendShipsController.deleteFriend')
+})
+  .middleware('auth')
+  .prefix('api')
