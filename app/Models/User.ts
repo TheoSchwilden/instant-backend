@@ -11,6 +11,7 @@ import {
 } from '@ioc:Adonis/Lucid/Orm'
 import Profile from './Profile'
 import Event from './Event'
+import FriendShip from './FriendShip'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -36,6 +37,11 @@ export default class User extends BaseModel {
 
   @hasMany(() => Event)
   public events: HasMany<typeof Event>
+
+  @hasMany(() => FriendShip, {
+    foreignKey: 'userId',
+  })
+  public friends: HasMany<typeof FriendShip>
 
   @beforeSave()
   public static async hashPassword(user: User) {
