@@ -1,0 +1,7 @@
+POST http://localhost:3333/api/events/search
+Content-Type: application/json
+Authorization: Bearer Mw.RiqujC9HgE_21KxO0MlYKkT1NpZGIT9Kd-soGITXK-Wn-iU3X9m7OFT36uw_
+
+{
+  "title": "updated"
+}

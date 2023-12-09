@@ -1,0 +1,13 @@
+PUT http://localhost:3333/api/events/4
+Content-Type: application/json
+Authorization: Bearer MQ.V3RPnIJdX1-bRLmLXvvHM9PguZb7BXqtNbtiPVbTqGSV0d6MtG5jmP8rbIjs
+
+{
+  "title": "My Event 4 UPDATED",
+  "description": "This is a test event",
+  "image": "https://via.placeholder.com/150",
+  "date": "31-12-2023",
+  "time": "23:59",
+  "location": "Test Location",
+  "userId": 1
+}

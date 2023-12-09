@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Event extends BaseModel {
   @column({ isPrimary: true })
@@ -14,10 +14,13 @@ export default class Event extends BaseModel {
   @column()
   public image: string
 
-  @column()
+  @column.dateTime({
+    autoCreate: true,
+    serialize: (value: DateTime) => value.toFormat('dd-MM-yyyy'),
+  })
   public date: DateTime
 
-  @column()
+  @column.dateTime({ autoCreate: true, serialize: (value: DateTime) => value.toFormat('HH:mm') })
   public time: DateTime
 
   @column()
@@ -31,4 +34,15 @@ export default class Event extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @beforeSave()
+  public static async formatDates(model: Event) {
+    if (model.date) {
+      model.date = DateTime.fromFormat(model.date.toFormat('dd-MM-yyyy'), 'dd-MM-yyyy')
+    }
+
+    if (model.time) {
+      model.time = DateTime.fromFormat(model.time.toFormat('HH:mm'), 'HH:mm')
+    }
+  }
 }

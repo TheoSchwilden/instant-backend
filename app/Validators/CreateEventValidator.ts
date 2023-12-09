@@ -27,10 +27,10 @@ export default class CreateEventValidator {
     title: schema.string({ trim: true }, [rules.minLength(3)]),
     description: schema.string({ trim: true }, [rules.minLength(3)]),
     image: schema.string({ trim: true }, [rules.url()]),
-    date: schema.date(),
-    time: schema.date(),
+    date: schema.date({ format: 'dd-MM-yyyy' }),
+    time: schema.date({ format: 'HH:mm' }),
     location: schema.string({ trim: true }, [rules.minLength(3)]),
-    // userId: schema.number(),
+    userId: schema.number(),
   })
 
   /**
@@ -44,5 +44,13 @@ export default class CreateEventValidator {
    * }
    *
    */
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+    'title.minLength': 'Le titre doit comporter au moins 3 caractères',
+    'description.minLength': 'La description doit comporter au moins 3 caractères',
+    'image.url': "L'image doit être une URL valide",
+    'date.date': 'La date doit être une date valide',
+    'time.date': "L'heure doit être une date valide",
+    'location.minLength': "L'emplacement doit comporter au moins 3 caractères",
+    'userId.number': "L'ID de l'utilisateur doit être un nombre",
+  }
 }

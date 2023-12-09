@@ -1,0 +1,6 @@
+
+DELETE  http://localhost:3333/api/events/2
+Content-Type: application/json
+Authorization: Bearer MQ.V3RPnIJdX1-bRLmLXvvHM9PguZb7BXqtNbtiPVbTqGSV0d6MtG5jmP8rbIjs
+
+

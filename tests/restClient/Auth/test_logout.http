@@ -1,6 +1,7 @@
 
 POST http://localhost:3333/api/logout
 Content-Type: application/json
+Authorization: Bearer Mw.HxA75hImtafDexkUEvAeOoBm9osy7h8ep1pvKB6mnD_uxd-qxhX2SRdQDa8G
 
 {
 
