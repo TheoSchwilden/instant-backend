@@ -1,16 +1,21 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Event from 'App/Models/Event'
+import EventInvitation from 'App/Models/EventInvitation'
 import CreateEventValidator from 'App/Validators/CreateEventValidator'
 
 export default class EventsController {
   public async index({ response, auth }: HttpContextContract) {
     try {
-      const user = auth.use('api').user
-      if (!user) {
-        return response.status(401).json({ message: 'User not authenticated' })
-      }
-      const events = await Event.query().where('user_id', user.id)
-      return response.status(200).json(events)
+      const user = await auth.use('api').authenticate()
+      const ownEvents = await Event.query().where('userId', user.id)
+      const invitedEvents = await EventInvitation.query()
+        .where('inviteeId', user.id)
+        .andWhere('accepted', true)
+        .preload('event')
+
+      return response
+        .status(200)
+        .json({ ownEvents, invitedEvents: invitedEvents.map((invitation) => invitation.event) })
     } catch (error) {
       return response.status(error.status).json({ message: error.message })
     }
@@ -18,11 +23,20 @@ export default class EventsController {
 
   public async show({ params, response, auth }: HttpContextContract) {
     try {
-      const user = auth.use('api').user
-      if (!user) {
-        return response.status(401).json({ message: 'User not authenticated' })
+      const user = await auth.use('api').authenticate()
+      const event = await Event.query().where('id', params.id).first()
+
+      if (
+        !event ||
+        (event.userId !== user.id &&
+          !(await EventInvitation.query()
+            .where('eventId', event.id)
+            .where('inviteeId', user.id)
+            .andWhere('accepted', true)
+            .first()))
+      ) {
+        return response.status(404).json({ message: 'Event not found' })
       }
-      const event = await Event.query().where('id', params.id).where('userId', user.id).first()
       return response.status(200).json(event)
     } catch (error) {
       return response.status(error.status).json({ message: error.message })
@@ -48,17 +62,16 @@ export default class EventsController {
 
   public async update({ params, request, response, auth }: HttpContextContract) {
     try {
-      const payload = await request.validate(CreateEventValidator)
-      const user = auth.use('api').user
-      if (!user) {
-        return response.status(401).json({ message: 'User not authenticated' })
+      const user = await auth.use('api').authenticate()
+      const event = await Event.query().where('id', params.id).first()
+
+      if (!event || event.userId !== user.id) {
+        return response.status(403).json({ message: 'You are not authorized to update this event' })
       }
-      const event = await Event.query().where('id', params.id).where('userId', user.id).first()
-      if (!event) {
-        return response.status(404).json({ message: 'Event not found' })
-      }
-      event.merge(payload)
+
+      event.merge(request.only(['name', 'date', 'location']))
       await event.save()
+
       return response.status(200).json(event)
     } catch (error) {
       return response.status(error.status).json({ message: error.message })
@@ -67,16 +80,16 @@ export default class EventsController {
 
   public async destroy({ params, response, auth }: HttpContextContract) {
     try {
-      const user = auth.use('api').user
-      if (!user) {
-        return response.status(401).json({ message: 'User not authenticated' })
+      const user = await auth.use('api').authenticate()
+      const event = await Event.query().where('id', params.id).first()
+
+      if (!event || event.userId !== user.id) {
+        return response.status(403).json({ message: 'You are not authorized to delete this event' })
       }
-      const event = await Event.query().where('id', params.id).where('userId', user.id).first()
-      if (!event) {
-        return response.status(404).json({ message: 'Event not found' })
-      }
+
       await event.delete()
-      return response.status(204)
+
+      return response.status(200).json({ message: 'Event deleted' })
     } catch (error) {
       return response.status(error.status).json({ message: error.message })
     }
