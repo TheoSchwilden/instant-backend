@@ -59,3 +59,11 @@ Route.group(() => {
 })
   .middleware('auth')
   .prefix('api')
+
+Route.group(() => {
+  Route.post('/invitations', 'EventInvitationsController.inviteToEvent')
+  Route.put('/invitations/:id/accept', 'EventInvitationsController.acceptInvitationToEvent')
+  Route.delete('/invitations/:id/reject', 'EventInvitationsController.rejectInvitationToEvent')
+})
+  .middleware('auth')
+  .prefix('api')

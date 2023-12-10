@@ -1,10 +1,10 @@
 ### Test Create Event ###
 POST http://localhost:3333/api/events
 Content-Type: application/json
-Authorization: Bearer Mw.RiqujC9HgE_21KxO0MlYKkT1NpZGIT9Kd-soGITXK-Wn-iU3X9m7OFT36uw_
+Authorization: Bearer Ng.vRH9bzAWloAjl-zwHBVwhi5-hvqfsLI9c5_xrqApOKZlytlq4DzoPfTGOJer
 
 {
-  "title": "My Event 7",
+  "title": "My Event",
   "description": "This is a test event",
   "image": "https://via.placeholder.com/150",
   "date": "31-12-2023",

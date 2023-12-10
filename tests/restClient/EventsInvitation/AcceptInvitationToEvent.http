@@ -1,3 +1,3 @@
-GET http://localhost:3333/api/events
-Content-Type: application/json
+PUT http://localhost:3333/api/invitations/1/accept
 Authorization: Bearer Nw.lUuFW6yuMWmdhP3kfRJosp4xW9_Bu7SHu4toK8ZmeoAVZnpq7wI5xfD_T0h-
+

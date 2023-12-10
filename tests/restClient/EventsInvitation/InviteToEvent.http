@@ -1,0 +1,8 @@
+POST http://localhost:3333/api/invitations
+Content-Type: application/json
+Authorization: Bearer Ng.vRH9bzAWloAjl-zwHBVwhi5-hvqfsLI9c5_xrqApOKZlytlq4DzoPfTGOJer
+
+{
+  "eventId": 1,
+  "inviteeId": 2
+}
