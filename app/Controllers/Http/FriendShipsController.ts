@@ -4,10 +4,7 @@ import FriendShip from 'App/Models/FriendShip'
 export default class FriendShipsController {
   public async index({ response, auth }: HttpContextContract) {
     try {
-      const user = auth.use('api').user
-      if (!user) {
-        return response.status(401).json({ message: 'User not authenticated' })
-      }
+      const user = await auth.use('api').authenticate()
       const friends = await user
         .related('friends')
         .query()

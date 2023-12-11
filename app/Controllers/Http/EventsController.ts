@@ -46,10 +46,7 @@ export default class EventsController {
   public async store({ request, response, auth }: HttpContextContract) {
     try {
       const payload = await request.validate(CreateEventValidator)
-      const user = auth.use('api').user
-      if (!user) {
-        return response.status(401).json({ message: 'User not authenticated' })
-      }
+      const user = await auth.use('api').authenticate()
       console.log(user.id)
 
       const event = await Event.create({ ...payload, userId: user.id })
@@ -98,22 +95,11 @@ export default class EventsController {
   public async search({ request, response, auth }: HttpContextContract) {
     try {
       const { title } = request.all()
-      const user = auth.use('api').user
-      if (!user) {
-        return response.status(401).json({ message: 'User not authenticated' })
-      }
+      const user = await auth.use('api').authenticate()
+
       const events = await Event.query()
         .where('title', 'like', `%${title}%`)
         .where('userId', user.id)
-      return response.status(200).json(events)
-    } catch (error) {
-      return response.status(error.status).json({ message: error.message })
-    }
-  }
-
-  public async getEventsByUser({ params, response }: HttpContextContract) {
-    try {
-      const events = await Event.query().where('user_id', params.id)
       return response.status(200).json(events)
     } catch (error) {
       return response.status(error.status).json({ message: error.message })

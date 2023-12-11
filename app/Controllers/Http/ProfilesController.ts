@@ -4,10 +4,7 @@ import CreateProfileValidator from 'App/Validators/CreateProfileValidator'
 export default class ProfilesController {
   public async getProfile({ response, auth }: HttpContextContract) {
     try {
-      const user = auth.use('api').user
-      if (!user) {
-        return response.status(401).json({ message: 'User not authenticated' })
-      }
+      const user = await auth.use('api').authenticate()
       const profile = await user.related('profile').query().first()
       return response.status(200).json(profile)
     } catch (error) {
@@ -18,10 +15,7 @@ export default class ProfilesController {
   public async store({ request, response, auth }: HttpContextContract) {
     try {
       const payload = await request.validate(CreateProfileValidator)
-      const user = auth.use('api').user
-      if (!user) {
-        return response.status(401).json({ message: 'User not authenticated' })
-      }
+      const user = await auth.use('api').authenticate()
       const existingProfile = await user.related('profile').query().first()
       if (existingProfile) {
         return response.status(409).json({ message: 'Profile already exists' })
@@ -37,10 +31,7 @@ export default class ProfilesController {
   public async update({ request, response, auth }: HttpContextContract) {
     try {
       const payload = await request.validate(CreateProfileValidator)
-      const user = auth.use('api').user
-      if (!user) {
-        return response.status(401).json({ message: 'User not authenticated' })
-      }
+      const user = await auth.use('api').authenticate()
       const profile = await user.related('profile').query().first()
       if (!profile) {
         return response.status(404).json({ message: 'Profile not found' })
