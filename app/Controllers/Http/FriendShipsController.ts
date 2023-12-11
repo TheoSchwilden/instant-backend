@@ -37,8 +37,6 @@ export default class FriendShipsController {
   public async acceptFriend({ auth, params, response }: HttpContextContract) {
     try {
       const user = await auth.use('api').authenticate()
-      console.log(user.id) // Ajoutez cette ligne
-      console.log(params.id) // Ajoutez cette ligne
       const friendShip = await FriendShip.query()
         .where('user_id', params.id)
         .where('friend_id', user.id)

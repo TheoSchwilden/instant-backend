@@ -20,7 +20,6 @@ export default class AuthController {
 
       return response.status(200).json({ message: 'User registered successfully' })
     } catch (error) {
-      // Adonis peut gérer les erreurs ici, par exemple, si la validation échoue
       return response.status(error.status).json({ message: error.message })
     }
   }
